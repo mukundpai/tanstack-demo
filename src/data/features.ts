@@ -49,5 +49,51 @@ export const routerFeatures: Feature[] = [
     detailedDescription: 'Create complex routing hierarchies with nested routes and shared layouts.',
     codeExample: `const rootRoute = new RootRoute({ component: Layout })`,
     documentation: 'https://tanstack.com/router/latest/docs/framework/react/guide/nested-routes'
+  },
+  {
+    id: 'file-based-routing',
+    title: 'File-Based Routing',
+    description: 'Optional file-based routing with automatic route generation',
+    icon: '📁',
+    detailedDescription: 'TanStack Router supports file-based routing similar to Next.js, allowing you to define routes through your file structure while maintaining type safety.',
+    codeExample: `
+// pages/users/[userId].tsx
+export const Route = createFileRoute('/users/$userId')({
+  component: UserDetailsPage,
+  loader: ({ params }) => fetchUser(params.userId)
+})`,
+    documentation: 'https://tanstack.com/router/latest/docs/framework/react/guide/file-based-routing'
+  },
+  {
+    id: 'loaders',
+    title: 'Route Loaders',
+    description: 'Data loading with built-in suspense support',
+    icon: '📥',
+    detailedDescription: 'Load data before rendering with built-in suspense integration and type-safe data passing between routes.',
+    codeExample: `
+export const Route = createRoute({
+  loader: async () => {
+    const data = await fetchData()
+    return { data }
+  },
+  component: ({ useLoader }) => {
+    const { data } = useLoader()
+    return <div>{data}</div>
+  }
+})`,
+    documentation: 'https://tanstack.com/router/latest/docs/framework/react/guide/route-loaders'
+  },
+  {
+    id: 'pending-ui',
+    title: 'Pending UI',
+    description: 'Built-in pending states for navigation',
+    icon: '⌛',
+    detailedDescription: 'Handle loading states elegantly with built-in pending UI support during navigation and data loading.',
+    codeExample: `
+function App() {
+  const pending = useNavigationPending()
+  return pending ? <LoadingSpinner /> : <Outlet />
+}`,
+    documentation: 'https://tanstack.com/router/latest/docs/framework/react/guide/pending-ui'
   }
 ] 
