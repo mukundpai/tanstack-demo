@@ -1,5 +1,4 @@
 import { useNavigate } from '@tanstack/react-router'
-import { FeatureCard } from '../components/FeatureCard'
 import { routerFeatures } from '../data/features'
 
 export function HomePage() {

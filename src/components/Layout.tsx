@@ -63,6 +63,13 @@ export function Layout() {
               >
                 Features
               </Link>
+              <Link
+                to="/architecture"
+                className="text-gray-600 hover:text-blue-600 transition-colors"
+                activeProps={{ className: 'text-blue-600 font-medium' }}
+              >
+                Architecture
+              </Link>
             </nav>
           </div>
         </div>

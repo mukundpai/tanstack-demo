@@ -16,6 +16,7 @@ import { PostsPage } from './routes/posts'
 import { PostDetailsPage } from './routes/posts.$postId'
 import { FeaturesPage } from './routes/features'
 import { FeatureDetailsPage } from './routes/features.$featureId'
+import { ArchitecturePage } from './routes/architecture'
 import './index.css'
 
 // Create a root route
@@ -93,16 +94,20 @@ const featureDetailsRoute = new Route({
   component: FeatureDetailsPage,
 })
 
+const architectureRoute = new Route({
+  getParentRoute: () => rootRoute,
+  path: '/architecture',
+  component: ArchitecturePage,
+})
+
 // Create the route tree using your routes
 const routeTree = rootRoute.addChildren([
   indexRoute,
   aboutRoute,
-  usersRoute,
-  userDetailsRoute,
-  postsRoute,
-  postDetailsRoute,
-  featuresRoute,
-  featureDetailsRoute,
+  architectureRoute,
+  postsRoute.addChildren([postDetailsRoute]),
+  featuresRoute.addChildren([featureDetailsRoute]),
+  usersRoute.addChildren([userDetailsRoute])
 ])
 
 // Create the router using your route tree
