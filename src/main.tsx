@@ -1,6 +1,6 @@
 import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
-import './index.css'
+import { z } from 'zod'
 import {
   RouterProvider,
   Router,
@@ -12,6 +12,7 @@ import { HomePage } from './routes'
 import { AboutPage } from './routes/about'
 import { UsersPage } from './routes/users'
 import { UserDetailsPage } from './routes/users.$userId'
+import './index.css'
 
 // Create a root route
 const rootRoute = new RootRoute({
@@ -31,9 +32,18 @@ const aboutRoute = new Route({
   component: AboutPage,
 })
 
+// Example of using search parameters
+const usersSearchSchema = z.object({
+  search: z.string().optional(),
+  role: z.enum(['Developer', 'Designer', 'Manager']).optional(),
+})
+
 const usersRoute = new Route({
   getParentRoute: () => rootRoute,
   path: '/users',
+  validateSearch: (search: Record<string, unknown>) => {
+    return usersSearchSchema.parse(search)
+  },
   component: UsersPage,
 })
 
@@ -61,8 +71,13 @@ declare module '@tanstack/react-router' {
   }
 }
 
-createRoot(document.getElementById('root')!).render(
-  <StrictMode>
-    <RouterProvider router={router} />
-  </StrictMode>,
-)
+// Make sure you're using createRoot
+const container = document.getElementById('root')
+if (container) {
+  const root = createRoot(container)
+  root.render(
+    <StrictMode>
+      <RouterProvider router={router} />
+    </StrictMode>
+  )
+}
