@@ -12,6 +12,10 @@ import { HomePage } from './routes'
 import { AboutPage } from './routes/about'
 import { UsersPage } from './routes/users'
 import { UserDetailsPage } from './routes/users.$userId'
+import { PostsPage } from './routes/posts'
+import { PostDetailsPage } from './routes/posts.$postId'
+import { FeaturesPage } from './routes/features'
+import { FeatureDetailsPage } from './routes/features.$featureId'
 import './index.css'
 
 // Create a root route
@@ -53,12 +57,52 @@ const userDetailsRoute = new Route({
   component: UserDetailsPage,
 })
 
+const postsSearchSchema = z.object({
+  search: z.string().optional(),
+  category: z.enum(['Tech', 'Design', 'Business']).optional(),
+  page: z.string().optional(),
+})
+
+const postsRoute = new Route({
+  getParentRoute: () => rootRoute,
+  path: '/posts',
+  validateSearch: (search: Record<string, unknown>) => {
+    return postsSearchSchema.parse(search)
+  },
+  component: PostsPage,
+})
+
+const postDetailsRoute = new Route({
+  getParentRoute: () => rootRoute,
+  path: '/posts/$postId',
+  component: PostDetailsPage,
+})
+
+const featuresRoute = new Route({
+  getParentRoute: () => rootRoute,
+  path: '/features',
+  validateSearch: (search: Record<string, unknown>) => {
+    return postsSearchSchema.parse(search)
+  },
+  component: FeaturesPage,
+})
+
+const featureDetailsRoute = new Route({
+  getParentRoute: () => rootRoute,
+  path: '/features/$featureId',
+  component: FeatureDetailsPage,
+})
+
 // Create the route tree using your routes
 const routeTree = rootRoute.addChildren([
   indexRoute,
   aboutRoute,
   usersRoute,
   userDetailsRoute,
+  postsRoute,
+  postDetailsRoute,
+  featuresRoute,
+  featureDetailsRoute,
 ])
 
 // Create the router using your route tree

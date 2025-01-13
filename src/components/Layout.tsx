@@ -49,6 +49,20 @@ export function Layout() {
               >
                 Users
               </Link>
+              <Link
+                to="/posts"
+                className="text-gray-600 hover:text-blue-600 transition-colors"
+                activeProps={{ className: 'text-blue-600 font-medium' }}
+              >
+                Posts
+              </Link>
+              <Link
+                to="/features"
+                className="text-gray-600 hover:text-blue-600 transition-colors"
+                activeProps={{ className: 'text-blue-600 font-medium' }}
+              >
+                Features
+              </Link>
             </nav>
           </div>
         </div>
