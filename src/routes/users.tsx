@@ -1,11 +1,11 @@
 import { useNavigate, useSearch } from '@tanstack/react-router'
 import { UserCard } from '../components/UserCard'
 
-const users = [
-  { id: 1, name: 'John Doe', role: 'Developer', email: 'john@example.com' },
-  { id: 2, name: 'Jane Smith', role: 'Designer', email: 'jane@example.com' },
-  { id: 3, name: 'Bob Johnson', role: 'Manager', email: 'bob@example.com' },
-  { id: 4, name: 'Alice Brown', role: 'Developer', email: 'alice@example.com' },
+export const users = [
+  { id: 1, name: 'Shishir K', role: 'Manager', email: 'shishir@gstzen.in' },
+  { id: 2, name: 'Sumanth', role: 'Senior Software Developer', email: 'sumanth@gstzen.in' },
+  { id: 3, name: 'Praneeth K', role: 'Senior Software Developer', email: 'praneeth@gstzen.in' },
+  { id: 4, name: 'Utkarsh', role: 'Senior SOftware Developer', email: 'utkarsh@gstzen.in' },
 ]
 
 export function UsersPage() {

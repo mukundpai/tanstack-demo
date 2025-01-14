@@ -1,11 +1,12 @@
 import { useParams } from '@tanstack/react-router'
+import {users} from '../routes/users'
 
-const users = [
-  { id: 1, name: 'John Doe', role: 'Developer', email: 'john@example.com' },
-  { id: 2, name: 'Jane Smith', role: 'Designer', email: 'jane@example.com' },
-  { id: 3, name: 'Bob Johnson', role: 'Manager', email: 'bob@example.com' },
-  { id: 4, name: 'Alice Brown', role: 'Developer', email: 'alice@example.com' },
-]
+// const users = [
+//   { id: 1, name: 'John Doe', role: 'Developer', email: 'john@example.com' },
+//   { id: 2, name: 'Jane Smith', role: 'Designer', email: 'jane@example.com' },
+//   { id: 3, name: 'Bob Johnson', role: 'Manager', email: 'bob@example.com' },
+//   { id: 4, name: 'Alice Brown', role: 'Developer', email: 'alice@example.com' },
+// ]
 
 export function UserDetailsPage() {
   const { userId } = useParams({ from: '/users/$userId' })

@@ -1,5 +1,7 @@
 import { useParams, useNavigate } from '@tanstack/react-router'
 import { routerFeatures } from '../data/features'
+import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter'
+import { vscDarkPlus } from 'react-syntax-highlighter/dist/esm/styles/prism'
 
 export function FeatureDetailsPage() {
   const { featureId } = useParams({ from: '/features/$featureId' })
@@ -38,9 +40,21 @@ export function FeatureDetailsPage() {
         <p className="text-lg text-gray-600">{feature.detailedDescription}</p>
         
         <h3 className="text-xl font-semibold mt-8 mb-4">Code Example</h3>
-        <pre className="bg-gray-50 p-4 rounded-lg overflow-x-auto">
-          <code className="text-sm">{feature.codeExample}</code>
-        </pre>
+        <div className="rounded-lg overflow-hidden">
+          <SyntaxHighlighter 
+            language="typescript"
+            style={vscDarkPlus}
+            customStyle={{
+              margin: 0,
+              padding: '1.5rem',
+              fontSize: '0.875rem',
+              lineHeight: '1.5',
+              borderRadius: '0.5rem'
+            }}
+          >
+            {feature.codeExample}
+          </SyntaxHighlighter>
+        </div>
 
         <div className="mt-8">
           <a
