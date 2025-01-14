@@ -1,4 +1,4 @@
-import { StrictMode } from 'react'
+import { StrictMode, lazy } from 'react'
 import { createRoot } from 'react-dom/client'
 import { z } from 'zod'
 import {
@@ -100,6 +100,26 @@ const architectureRoute = new Route({
   component: ArchitecturePage,
 })
 
+const lazyPostsRoute = new Route({
+  getParentRoute: () => rootRoute,
+  path: '/lazy/posts',
+  component: lazy(() => import('./routes/lazy.posts')),
+  pendingComponent: () => (
+    <div className="fixed inset-0 bg-white bg-opacity-75 flex justify-center items-center z-50">
+      <div>
+        <div className="animate-spin rounded-full h-16 w-16 border-4 border-blue-600 border-t-transparent"></div>
+        <p className="mt-4 text-blue-600 font-semibold">Loading Route...</p>
+      </div>
+    </div>
+  ),
+  errorComponent: ({ error }) => (
+    <div className="text-center py-12">
+      <h2 className="text-2xl font-bold text-red-600">Error Loading Posts</h2>
+      <p className="mt-2 text-gray-600">{error.message}</p>
+    </div>
+  )
+})
+
 // Create the route tree using your routes
 const routeTree = rootRoute.addChildren([
   indexRoute,
@@ -107,7 +127,8 @@ const routeTree = rootRoute.addChildren([
   architectureRoute,
   postsRoute.addChildren([postDetailsRoute]),
   featuresRoute.addChildren([featureDetailsRoute]),
-  usersRoute.addChildren([userDetailsRoute])
+  usersRoute.addChildren([userDetailsRoute]),
+  lazyPostsRoute
 ])
 
 // Create the router using your route tree

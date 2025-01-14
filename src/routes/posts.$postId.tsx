@@ -7,13 +7,6 @@ const posts = Array.from({ length: 20 }, (_, i) => ({
   title: `Post ${i + 1}`,
   category: ['Tech', 'Design', 'Business'][i % 3],
   content: `This is the full content for post ${i + 1}...`,
-  relatedPosts: [
-    i > 0 ? i : i + 1,
-    i < 19 ? i + 2 : i,
-    i < 18 ? i + 3 : i
-  ].filter((id, index, self) => 
-    self.indexOf(id) === index && id !== i + 1
-  )
 }))
 
 export function PostDetailsPage() {
@@ -22,25 +15,35 @@ export function PostDetailsPage() {
   const debouncedRef = useRef<Function>()
   
   useEffect(() => {
-    // Create the debounced function
-    debouncedRef.current = debounce((relatedId: number) => {
+    debouncedRef.current = debounce((nextId: number) => {
       navigate({
         to: '/posts/$postId',
-        params: { postId: String(relatedId) }
+        params: { postId: String(nextId) },
+        preload: true,
       })
     }, 300)
 
-    // Cleanup
     return () => {
       debouncedRef.current?.cancel()
     }
   }, [navigate])
 
-  const handlePreload = useCallback((relatedId: number) => {
-    debouncedRef.current?.(relatedId)
+  const handlePreload = useCallback((nextId: number) => {
+    debouncedRef.current?.(nextId)
   }, [])
 
-  const post = posts.find(p => p.id === Number(postId))
+  const handleNavigate = useCallback((nextId: number) => {
+    debouncedRef.current?.cancel()
+    navigate({
+      to: '/posts/$postId',
+      params: { postId: String(nextId) }
+    })
+  }, [navigate])
+
+  const currentPostIndex = posts.findIndex(p => p.id === Number(postId))
+  const post = posts[currentPostIndex]
+  const previousPost = currentPostIndex > 0 ? posts[currentPostIndex - 1] : null
+  const nextPost = currentPostIndex < posts.length - 1 ? posts[currentPostIndex + 1] : null
 
   if (!post) {
     return <div>Post not found</div>
@@ -65,36 +68,29 @@ export function PostDetailsPage() {
         <p className="text-gray-600">{post.content}</p>
       </div>
 
-      {post.relatedPosts.length > 0 && (
-        <div className="space-y-4">
-          <h3 className="text-xl font-semibold text-gray-900">Related Posts</h3>
-          {post.relatedPosts.map(relatedId => {
-            const relatedPost = posts.find(p => p.id === relatedId)
-            if (!relatedPost) return null
-            
-            return (
-              <div
-                key={relatedId}
-                className="p-4 border rounded-lg hover:border-blue-500 transition-colors cursor-pointer"
-                onClick={() => 
-                  navigate({
-                    to: '/posts/$postId',
-                    params: { postId: String(relatedId) }
-                  })
-                }
-                onMouseEnter={() => handlePreload(relatedId)}
-              >
-                <div className="flex justify-between items-start">
-                  <h3 className="text-lg font-semibold text-gray-900">{relatedPost.title}</h3>
-                  <span className="px-2 py-1 text-sm rounded-full bg-gray-100">
-                    {relatedPost.category}
-                  </span>
-                </div>
-              </div>
-            )
-          })}
-        </div>
-      )}
+      <div className="flex justify-between items-center gap-4">
+        {previousPost && (
+          <div
+            className="flex-1 p-4 border rounded-lg hover:border-blue-500 transition-colors cursor-pointer"
+            onClick={() => handleNavigate(previousPost.id)}
+            // onMouseEnter={() => handlePreload(previousPost.id)}
+          >
+            <div className="text-sm text-gray-500 mb-1">← Previous Post</div>
+            <h3 className="text-lg font-semibold text-gray-900">{previousPost.title}</h3>
+          </div>
+        )}
+        
+        {nextPost && (
+          <div
+            className="flex-1 p-4 border rounded-lg "
+            onClick={() => handleNavigate(nextPost.id)}
+            onMouseEnter={() => handlePreload(nextPost.id)}
+          >
+            <div className="text-sm text-gray-500 mb-1">Next Post →</div>
+            <h3 className="text-lg font-semibold text-gray-900">{nextPost.title}</h3>
+          </div>
+        )}
+      </div>
     </div>
   )
 } 
